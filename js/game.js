@@ -91,7 +91,7 @@ $(function() {
                 fighter.animate({cx:300,cy:50},1000)
                 bullet.remove();
                 $("#gamestatus").text("You Win!");
-                return console.log("You Win!");  
+                console.log("You Win!");  
             }
     for (var i = 0; i < blueenimies.length; i++) {
         var be = blueenimies[i]
