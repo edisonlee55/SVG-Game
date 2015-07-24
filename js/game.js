@@ -11,6 +11,7 @@ $(function() {
         stroke: 'black',
         strokeWidth: 5
     });
+
     var enimies = [];
 
     for (var i = 0; i < 600 / 50; i++) {
@@ -19,11 +20,12 @@ $(function() {
     }
     var blueenimies = [];
     for (var i = 0; i < 3; i++) {
+        var fighterx = fighter.attr("cx");
         blueenimies[i] = s.circle(25 + (randomNext(30,50) * (i+1) * 50)%550, 100, 20).attr({
             fill:'blue'
         });
+        blueenimies[i].animate({cy:750,cx:fighterx},50000);
     }
-
     var bullet = s.circle(300, 850, 10).attr({fill:'darkred'});
     var point = 0
 
@@ -61,7 +63,6 @@ $(function() {
 
     setInterval(function() {
         for (var i = 0; i < enimies.length; i++) {
-            var fighterx = fighter.attr("cx");
             var e = enimies[i];
             var enimiesy = enimies[i].attr("cy");
             var collision = Snap.path.isBBoxIntersect(e.getBBox(), bullet.getBBox());
@@ -85,14 +86,13 @@ $(function() {
             if (enimiesy == 750){
                 enimies[i].animate({cx:fighterx},1000)
             }
-            
         }
         if (enimies.length == 0){
-            fighter.animate({cx:300,cy:50},1000)
-            bullet.remove();
-            $("#gamestatus").text("You Win!");
-            console.log("You Win!");
-        }
+                fighter.animate({cx:300,cy:50},1000)
+                bullet.remove();
+                $("#gamestatus").text("You Win!");
+                return console.log("You Win!");  
+            }
     for (var i = 0; i < blueenimies.length; i++) {
         var be = blueenimies[i]
         var collision3 = Snap.path.isBBoxIntersect(be.getBBox(), bullet.getBBox());
