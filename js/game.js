@@ -95,7 +95,7 @@ $(function() {
         }
         for (var i = 0; i < blueenimies.length; i++) {
             var be = blueenimies[i]
-            blueenimies[i].stop().animate({cy:750,cx:fighterx},5000);
+            blueenimies[i].stop().animate({cy:750,cx:fighterx},10000);
             var collision3 = Snap.path.isBBoxIntersect(be.getBBox(), bullet.getBBox());
             if (collision3) {
                 fighter.remove();
