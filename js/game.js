@@ -25,9 +25,12 @@ $(function() {
         });
         blueenimies[i].animate({cy:750,cx:fighterx},50000);
     }
-    var bullet = s.circle(300, 850, 10).attr({fill:'darkred'});
     var point = 0
-
+    var nowbullet = [];
+    var nowshotbullet = [];
+    for (var i = 0; i < 20; i++) {
+        nowbullet[i] = s.circle(300, 850, 10).attr({fill:'darkred'});
+    };
     var time = 1000;
     var w = 600;
     var hasBullet = true;
@@ -45,12 +48,15 @@ $(function() {
                 fighter.stop().animate({cx:w - 25}, t * time);
                 break;
             case 32: // fire
-                if (hasBullet) {
-                    hasBullet = false;
+                if (nowbullet.length > 0) {
                     var x = fighter.attr("cx");
                     var bullettime = 2000;
-                    bullet.stop().attr({cx:x,cy:750}).animate({cy:-10},bullettime, function() {
-                        hasBullet = true;
+                    var b = nowbullet.pop();
+                    nowshotbullet.push(b)
+                    b.stop().attr({cx:x,cy:750}).animate({cy:-10},bullettime, function() {
+                        var idx = nowshotbullet.indexOf(b);
+                        nowshotbullet.splice(idx, 1);
+                        nowbullet.push(b)
                     });
                 }
                 break;
@@ -63,58 +69,70 @@ $(function() {
     setInterval(function() {
         var fighterx = fighter.attr("cx");
         for (var i = 0; i < enimies.length; i++) {
-            var e = enimies[i];
-            var enimiesy = enimies[i].attr("cy");
-            var collision = Snap.path.isBBoxIntersect(e.getBBox(), bullet.getBBox());
-            if (collision) {
-                bullet.stop().attr({cx:-50});
-                hasBullet = true;
-                enimies.splice(i, 1);
-                e.remove();
-                point++
-                $("#point").text("The point:"+point);
-                break;
-            }
-            var collision2 = Snap.path.isBBoxIntersect(e.getBBox(), fighter.getBBox());
-            if (collision2) {
-                fighter.remove();
-                bullet.remove();
-                $("#gamestatus").text("Game Over!");
-                console.log("Game Over!");
-                break;
-            }
-            if (enimiesy == 750){
-                enimies[i].animate({cx:fighterx},1000)
-            }
+            for (var j = 0; j < nowshotbullet.length; j++) {
+                var bullet = nowshotbullet[j];
+                var e = enimies[i];
+                var enimiesy = e.attr("cy");
+                var collision = Snap.path.isBBoxIntersect(e.getBBox(), bullet.getBBox());
+                if (collision) {
+                    bullet.stop().attr({cx:-50});
+                    nowshotbullet.splice(j, 1);
+                    nowbullet.push(bullet)
+                    enimies.splice(i, 1);
+                    e.remove();
+                    point++
+                    $("#point").text("The point:"+point);
+                    break;
+                }
+                var collision2 = Snap.path.isBBoxIntersect(e.getBBox(), fighter.getBBox());
+                if (collision2) {
+                    fighter.remove();
+                    bullet.remove();
+                    $("#gamestatus").text("Game Over!");
+                    console.log("Game Over!");
+                    break;
+                }
+                if (enimiesy == 750){
+                    enimies[i].animate({cx:fighterx},1000)
+                }
+            };
         }
         if (enimies.length == 0){
             fighter.animate({cx:300,cy:50},1000)
-            bullet.remove();
+            nowbullet = []
+            nowshotbullet = []
             $("#gamestatus").text("You Win!");
             console.log("You Win!");  
         }
         for (var i = 0; i < blueenimies.length; i++) {
-            var be = blueenimies[i]
-            blueenimies[i].stop().animate({cy:750,cx:fighterx},10000);
-            var collision3 = Snap.path.isBBoxIntersect(be.getBBox(), bullet.getBBox());
-            if (collision3) {
-                fighter.remove();
-                bullet.remove();
-                blueenimies.splice(i, 1);
-                be.remove();
-                $("#gamestatus").text("Game Over!");
-                console.log("Game Over!");
-                break;
-            }
-            var collision4 = Snap.path.isBBoxIntersect(be.getBBox(), fighter.getBBox());
-            if (collision4) {
-                fighter.remove();
-                bullet.remove();
-                blueenimies.splice(i, 1);
-                be.remove();
-                $("#gamestatus").text("Game Over!");
-                console.log("Game Over!");
-                break;
+            for (var j = 0; j < nowshotbullet.length; j++) {
+                var bullet = nowshotbullet[j];
+                var be = blueenimies[i]
+                blueenimies[i].stop().animate({cy:750,cx:fighterx},10000);
+                var collision3 = Snap.path.isBBoxIntersect(be.getBBox(), bullet.getBBox());
+                if (collision3) {
+                    fighter.remove();
+                    bullet.remove();
+                    nowbullet = []
+                    nowshotbullet = []
+                    blueenimies.splice(i, 1);
+                    be.remove();
+                    $("#gamestatus").text("Game Over!");
+                    console.log("Game Over!");
+                    break;
+                }
+                var collision4 = Snap.path.isBBoxIntersect(be.getBBox(), fighter.getBBox());
+                if (collision4) {
+                    fighter.remove();
+                    bullet.remove();
+                    nowbullet = []
+                    nowshotbullet = []
+                    blueenimies.splice(i, 1);
+                    be.remove();
+                    $("#gamestatus").text("Game Over!");
+                    console.log("Game Over!");
+                    break;
+                };
             };
         };
     }, 50);
