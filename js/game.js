@@ -13,14 +13,13 @@ $(function() {
     });
 
     var enimies = [];
-
+    var fighterx = fighter.attr("cx");
     for (var i = 0; i < 600 / 50; i++) {
         enimies[i] = s.circle(25 + i * 50, 50, 20);
         enimies[i].animate({cy:750},100000);
     }
     var blueenimies = [];
     for (var i = 0; i < 3; i++) {
-        var fighterx = fighter.attr("cx");
         blueenimies[i] = s.circle(25 + (randomNext(30,50) * (i+1) * 50)%550, 100, 20).attr({
             fill:'blue'
         });
@@ -62,6 +61,7 @@ $(function() {
     });
 
     setInterval(function() {
+        var fighterx = fighter.attr("cx");
         for (var i = 0; i < enimies.length; i++) {
             var e = enimies[i];
             var enimiesy = enimies[i].attr("cy");
@@ -88,14 +88,15 @@ $(function() {
             }
         }
         if (enimies.length == 0){
-                fighter.animate({cx:300,cy:50},1000)
-                bullet.remove();
-                $("#gamestatus").text("You Win!");
-                console.log("You Win!");  
-            }
-    for (var i = 0; i < blueenimies.length; i++) {
-        var be = blueenimies[i]
-        var collision3 = Snap.path.isBBoxIntersect(be.getBBox(), bullet.getBBox());
+            fighter.animate({cx:300,cy:50},1000)
+            bullet.remove();
+            $("#gamestatus").text("You Win!");
+            console.log("You Win!");  
+        }
+        for (var i = 0; i < blueenimies.length; i++) {
+            var be = blueenimies[i]
+            blueenimies[i].stop().animate({cy:750,cx:fighterx},5000);
+            var collision3 = Snap.path.isBBoxIntersect(be.getBBox(), bullet.getBBox());
             if (collision3) {
                 fighter.remove();
                 bullet.remove();
@@ -105,7 +106,17 @@ $(function() {
                 console.log("Game Over!");
                 break;
             }
-    };
+            var collision4 = Snap.path.isBBoxIntersect(be.getBBox(), fighter.getBBox());
+            if (collision4) {
+                fighter.remove();
+                bullet.remove();
+                blueenimies.splice(i, 1);
+                be.remove();
+                $("#gamestatus").text("Game Over!");
+                console.log("Game Over!");
+                break;
+            };
+        };
     }, 50);
 
 });
