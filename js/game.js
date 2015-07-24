@@ -99,7 +99,7 @@ $(function() {
             if (collision3) {
                 fighter.remove();
                 bullet.remove();
-                blueenimies(i, 1);
+                blueenimies.splice(i, 1);
                 be.remove();
                 $("#gamestatus").text("Game Over!");
                 console.log("Game Over!");
