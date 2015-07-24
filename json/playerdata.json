@@ -1,0 +1,34 @@
+{
+	"Username": "Admin",
+    "Password": "adminisadmin",
+    "level": 100,
+    "point": 12,
+    "backpack": 
+     [
+         { 
+           "type": "Admin",
+           "Item ID": "admin:the god sword"
+         },
+         {
+           "type": "Admin",
+           "Item ID": "admin:adminitem"
+         }
+     ]
+},
+{
+	"Username": "Ian",
+    "Password": "ihatepassword",
+    "level": 46,
+    "point": 10,
+    "backpack": 
+     [
+         { 
+           "type": "Uncommon",
+           "Item ID": "uncommon:heal"
+         },
+         {
+           "type": "Uncommon",
+           "Item ID": "uncommon:uncommonitem"
+         }
+     ]
+}
