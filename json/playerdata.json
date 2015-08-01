@@ -1,4 +1,4 @@
-{
+[{
 	"Username": "Admin",
     "Password": "adminisadmin",
     "level": 100,
@@ -31,4 +31,4 @@
            "Item ID": "uncommon:uncommonitem"
          }
      ]
-}
+}]
