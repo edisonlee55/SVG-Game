@@ -1,3 +1,7 @@
+/*!
+ * SVG Game - game.js
+ * Copyright 2017 Edison Lee
+ */
 $(function() {
 
     function randomNext(min, max) {
